@@ -43,7 +43,7 @@
   .sub-dates { font-size: 11.5px; font-weight: 600; opacity: 0.92; margin-top: 2px; }
   .live-clock { font-size: 14px; font-weight: 700; text-align: right; white-space: nowrap; }
   .prayer-note { grid-column: 1 / -1; font-size: 10px; color: var(--text-secondary); text-align: center; margin-top: 3px; }
-  .prayer-bar { padding: 10px 8px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(6, 1fr); text-align: center; gap: 2px; }
+  .prayer-bar { padding: 10px 8px; margin-bottom: 10px; display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; gap: 2px; }
   .prayer-item .p-name { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
   .prayer-item .p-time { font-size: 11px; font-weight: 700; margin-top: 3px; }
   .cal-card { padding: 12px 10px; margin-bottom: 12px; }
@@ -81,15 +81,11 @@
   .input-row { display: flex; flex-direction: column; gap: 8px; }
   input, select { width: 100%; padding: 9px 11px; border-radius: 11px; border: 1px solid var(--card-border); background: rgba(15, 23, 42, 0.45); color: var(--text-primary); font-size: 13px; }
   .primary-btn { background: var(--accent); color: #06101f; border: none; padding: 10px; border-radius: 11px; font-weight: 700; font-size: 13px; cursor: pointer; }
-  body.theme-liquid-light { --bg-main: #eef3fb; --card-bg: rgba(255,255,255,0.65); --card-border: rgba(255,255,255,0.85); --text-primary: #0f172a; --text-secondary: #475569; }
-  body.theme-frosted-dark { --bg-main: #111318; --card-bg: rgba(30,34,45,0.62); --card-border: rgba(255,255,255,0.12); }
-  body.theme-nothing { --bg-main: #000000; --card-bg: #0c0c0c; --card-border: rgba(255,255,255,0.24); --card-highlight: none; --text-primary: #ffffff; --text-secondary: #a1a1aa; --accent: #D71921; --accent-glow: rgba(215,25,33,0.35); --blur: none; }
-  body.theme-classic-dark { --bg-main: #14171f; --card-bg: #1e222d; --card-border: #2c3242; --card-highlight: none; --blur: none; }
-  body.theme-light { --bg-main: #f4f6fa; --card-bg: #ffffff; --card-border: #e2e8f0; --card-highlight: none; --text-primary: #1e293b; --text-secondary: #64748b; --blur: none; }
-  body.theme-royal { --bg-main: #070d24; --card-bg: rgba(16,28,66,0.72); --accent: #60a5fa; }
-  body.theme-emerald { --bg-main: #051814; --card-bg: rgba(10,42,35,0.72); --accent: #34d399; }
-  body.theme-rosegold { --bg-main: #1b0f14; --card-bg: rgba(46,23,33,0.72); --accent: #fb7185; }
-  body.theme-obsidian { --bg-main: #0c0b09; --card-bg: rgba(28,25,20,0.78); --accent: #fbbf24; }
+  body.theme-liquid-light { --bg-main: #eaf1fb; --card-bg: rgba(255,255,255,0.56); --card-border: rgba(255,255,255,0.82); --text-primary: #101827; --text-secondary: #526176; --accent:#2563eb; --accent-glow:rgba(37,99,235,.22); --blur:blur(26px) saturate(185%); }
+  body.theme-liquid-dark { --bg-main:#070b14; --card-bg:rgba(20,28,46,.56); --card-border:rgba(255,255,255,.18); --text-primary:#f8fafc; --text-secondary:#a6b4c8; --accent:#71d5ff; --accent-glow:rgba(113,213,255,.28); --blur:blur(26px) saturate(175%); }
+  body.theme-nothing { --bg-main:#050505; --card-bg:rgba(12,12,12,.94); --card-border:rgba(255,255,255,.2); --card-highlight:none; --text-primary:#fff; --text-secondary:#a3a3a3; --accent:#e32636; --accent-glow:rgba(227,38,54,.25); --blur:blur(8px); }
+  body.theme-nothing .brand-title, body.theme-nothing .sec-title { letter-spacing:.08em; text-transform:uppercase; }
+  body.theme-nothing .glass-card { border-radius:8px; box-shadow:none; }
   @media (max-width: 360px) { .app-shell{padding:8px 8px 22px}.days-grid{gap:3px}.day-cell{min-height:48px;padding:3px}.g-num{font-size:12px}.cell-bottom{font-size:7.5px}.prayer-bar{grid-template-columns:repeat(3,1fr);row-gap:8px}.sky-box{height:205px} }
   @media (prefers-reduced-motion: reduce) { *,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important} }
 </style>
@@ -120,11 +116,6 @@
   <div id="calendarPage">
     <div class="sky-box">
       <canvas id="skyCanvas"></canvas>
-      <div class="sky-controls">
-        <button class="sky-pill active" id="modeAuto" onclick="setSkyMode('auto')">Auto</button>
-        <button class="sky-pill" id="modeDay" onclick="setSkyMode('day')">☀️ Day</button>
-        <button class="sky-pill" id="modeNight" onclick="setSkyMode('night')">🌙 Night</button>
-      </div>
       <div class="today-overlay day-text" id="todayOverlay">
         <div>
           <div class="eng-date-lg" id="heroEngDate">১৮ নভেম্বর ২০২৬</div>
@@ -160,6 +151,14 @@
       </div>
     </div>
     <div class="glass-card tool-section">
+      <span class="tool-label" id="skyModeLabel">দিন-রাতের অ্যানিমেশন</span>
+      <div class="chip-grid">
+        <button class="chip-btn selected" id="modeAuto" onclick="setSkyMode('auto')">Auto</button>
+        <button class="chip-btn" id="modeDay" onclick="setSkyMode('day')">☀️ Day</button>
+        <button class="chip-btn" id="modeNight" onclick="setSkyMode('night')">🌙 Night</button>
+      </div>
+    </div>
+    <div class="glass-card tool-section">
       <span class="tool-label">থিম ও ডিজাইন নির্বাচন</span>
       <div class="chip-grid" id="themeGrid"></div>
     </div>
@@ -177,6 +176,8 @@
     <div class="glass-card tool-section">
       <span class="tool-label">নামাজের সময়সূচীর বিভাগ (আনুমানিক)</span>
       <select id="divisionSelect" onchange="setDivision(this.value)"></select>
+      <button class="chip-btn" style="margin-top:8px;width:100%" onclick="useGPSLocation()">📍 Use GPS location / GPS ব্যবহার</button>
+      <div id="locationStatus" class="prayer-note"></div>
     </div>
     <div class="glass-card tool-section">
       <span class="tool-label">নতুন ইভেন্ট ও রিমাইন্ডার যুক্ত করুন</span>
@@ -213,17 +214,19 @@ const toBn=(s)=>lang==='en'?String(s):String(s).replace(/\d/g,d=>bnDigits[d]);
 const themes=[
   {id:'theme-liquid-dark',bn:'Liquid Glass Dark',en:'Liquid Glass Dark'},
   {id:'theme-liquid-light',bn:'Liquid Glass Light',en:'Liquid Glass Light'},
-  {id:'theme-frosted-dark',bn:'Frosted Glass Dark',en:'Frosted Glass Dark'},
-  {id:'theme-nothing',bn:'Nothing Style',en:'Nothing Style'},
-  {id:'theme-classic-dark',bn:'ক্ল্যাসিক ডার্ক',en:'Classic Dark'},
-  {id:'theme-light',bn:'লাইট থিম',en:'Light Theme'},
-  {id:'theme-royal',bn:'রয়্যাল মিডনাইট',en:'Royal Midnight'},
-  {id:'theme-emerald',bn:'এমেরাল্ড গ্লাস',en:'Emerald Velvet'},
-  {id:'theme-rosegold',bn:'রোজ গোল্ড',en:'Rose Gold'},
-  {id:'theme-obsidian',bn:'অবসিডিয়ান গোল্ড',en:'Obsidian Gold'}
+  {id:'theme-nothing',bn:'Nothing OS',en:'Nothing OS'}
 ];
 let activeTheme='theme-liquid-dark';
-const divisions={dhaka:{bn:'ঢাকা',en:'Dhaka',offset:0},chattogram:{bn:'চট্টগ্রাম',en:'Chattogram',offset:-5},rajshahi:{bn:'রাজশাহী',en:'Rajshahi',offset:7},khulna:{bn:'খুলনা',en:'Khulna',offset:4},barishal:{bn:'বরিশাল',en:'Barishal',offset:1},sylhet:{bn:'সিলেট',en:'Sylhet',offset:-6},rangpur:{bn:'রংপুর',en:'Rangpur',offset:6},mymensingh:{bn:'ময়মনসিংহ',en:'Mymensingh',offset:1}};
+const divisions={
+ dhaka:{bn:'ঢাকা',en:'Dhaka',lat:23.8103,lon:90.4125},
+ chattogram:{bn:'চট্টগ্রাম',en:'Chattogram',lat:22.3569,lon:91.7832},
+ rajshahi:{bn:'রাজশাহী',en:'Rajshahi',lat:24.3745,lon:88.6042},
+ khulna:{bn:'খুলনা',en:'Khulna',lat:22.8456,lon:89.5403},
+ barishal:{bn:'বরিশাল',en:'Barishal',lat:22.7010,lon:90.3535},
+ sylhet:{bn:'সিলেট',en:'Sylhet',lat:24.8949,lon:91.8687},
+ rangpur:{bn:'রংপুর',en:'Rangpur',lat:25.7439,lon:89.2752},
+ mymensingh:{bn:'ময়মনসিংহ',en:'Mymensingh',lat:24.7471,lon:90.4203}
+};
 const bdHolidays2026=[
   {m:0,d:1,type:'observance',bn:'ইংরেজি নববর্ষ',en:"New Year's Day"},
   {m:0,d:10,type:'observance',bn:'স্বদেশ প্রত্যাবর্তন দিবস',en:'Homecoming Day'},
@@ -414,7 +417,7 @@ function animateSky(t){
   g.addColorStop(0,'rgb('+Math.round(56*(1-skyMix)+7*skyMix)+','+Math.round(189*(1-skyMix)+12*skyMix)+','+Math.round(248*(1-skyMix)+32*skyMix)+')');
   g.addColorStop(1,'rgb('+Math.round(186*(1-skyMix)+22*skyMix)+','+Math.round(230*(1-skyMix)+33*skyMix)+','+Math.round(253*(1-skyMix)+62*skyMix)+')');
   ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-  if(skyMix<0.98){ctx.save();ctx.globalAlpha=1-skyMix;const sx=W*0.2,sy=H*0.26,sg=ctx.createRadialGradient(sx,sy,4,sx,sy,75*dpr);sg.addColorStop(0,'rgba(254,240,138,0.95)');sg.addColorStop(1,'rgba(253,224,71,0)');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,75*dpr,0,Math.PI*2);ctx.fill();ctx.restore();}
+  if(skyMix<0.98){ctx.save();ctx.globalAlpha=1-skyMix;const skyNow=new Date(),skyTimes=prayerTimesFor(skyNow),sunriseM=skyTimes[1].min,sunsetM=skyTimes[4].min,nowM=skyNow.getHours()*60+skyNow.getMinutes(),sunProgress=Math.max(0,Math.min(1,(nowM-sunriseM)/Math.max(1,sunsetM-sunriseM))),sx=W*(0.08+0.84*sunProgress),sy=H*(0.66-0.43*Math.sin(Math.PI*sunProgress)),sg=ctx.createRadialGradient(sx,sy,4,sx,sy,75*dpr);sg.addColorStop(0,'rgba(254,240,138,0.95)');sg.addColorStop(1,'rgba(253,224,71,0)');ctx.fillStyle=sg;ctx.beginPath();ctx.arc(sx,sy,75*dpr,0,Math.PI*2);ctx.fill();ctx.restore();}
   if(skyMix>0.02){ctx.save();ctx.globalAlpha=skyMix;stars.forEach(s=>{ctx.fillStyle='rgba(255,255,255,'+(0.4+0.6*Math.sin(t*0.003+s.p))+')';ctx.beginPath();ctx.arc(s.x*W,s.y*H,s.r*dpr,0,Math.PI*2);ctx.fill();});const mx=W*0.22,my=H*0.26,mg=ctx.createRadialGradient(mx,my,4,mx,my,55*dpr);mg.addColorStop(0,'rgba(248,250,252,0.95)');mg.addColorStop(1,'rgba(186,230,253,0)');ctx.fillStyle=mg;ctx.beginPath();ctx.arc(mx,my,55*dpr,0,Math.PI*2);ctx.fill();ctx.restore();}
   clouds.forEach(c=>{c.x+=c.speed;if(c.x>1.18)c.x=-0.18;drawCloud(c.x*W,c.y*H,c.scale,skyMix>0.5);});
   if(skyMix<0.85){ctx.save();ctx.globalAlpha=1-skyMix;ctx.strokeStyle='rgba(15,23,42,0.75)';ctx.lineWidth=1.6*dpr;birds.forEach(b=>{b.x+=b.speed;if(b.x>1.1)b.x=-0.1;const bx=b.x*W,by=b.y*H+Math.sin(t*0.004+b.flap)*4,w=Math.sin(t*0.015+b.flap)*6*dpr;ctx.beginPath();ctx.moveTo(bx-7*dpr,by-w);ctx.quadraticCurveTo(bx-3*dpr,by-4*dpr,bx,by);ctx.quadraticCurveTo(bx+3*dpr,by-4*dpr,bx+7*dpr,by-w);ctx.stroke();});ctx.restore();}
@@ -550,6 +553,173 @@ window.addEventListener('DOMContentLoaded',()=>{
   setInterval(updateClockAndHero,1000);requestAnimationFrame(animateSky);
   setTimeout(()=>{document.getElementById('splash').classList.add('hide');},350);
 });
+
+// MyCalendar 2.0 enhancement layer
+const MC_DEFAULTS={lang:'bn',theme:'theme-liquid-dark',skyMode:'auto',soundEnabled:true,soundDuration:5,division:'dhaka',locationMode:'division',coords:null};
+let mcSettings={...MC_DEFAULTS};
+function mcLoadSettings(){
+  try{mcSettings={...MC_DEFAULTS,...JSON.parse(localStorage.getItem('mycal_settings')||'{}')};}catch(e){}
+  lang=mcSettings.lang;activeTheme=themes.some(t=>t.id===mcSettings.theme)?mcSettings.theme:'theme-liquid-dark';
+  skyMode=['auto','day','night'].includes(mcSettings.skyMode)?mcSettings.skyMode:'auto';
+  soundEnabled=mcSettings.soundEnabled!==false;soundDuration=Math.max(3,Math.min(30,Number(mcSettings.soundDuration)||5));
+  selectedDivision=divisions[mcSettings.division]?mcSettings.division:'dhaka';
+  if(mcSettings.coords && Number.isFinite(mcSettings.coords.lat)){window.mcCoords=mcSettings.coords;window.mcLocationMode='gps';}else{window.mcLocationMode='division';}
+  document.body.className=activeTheme;
+}
+function mcSaveSettings(){
+  mcSettings={...mcSettings,lang,theme:activeTheme,skyMode,soundEnabled,soundDuration,division:selectedDivision,locationMode:window.mcLocationMode||'division',coords:window.mcCoords||null};
+  try{localStorage.setItem('mycal_settings',JSON.stringify(mcSettings));}catch(e){}
+}
+const MC_I18N={
+ bn:{
+  pageTools:'⚙️ টুলস ভিউ',pageCalendar:'📅 ক্যালেন্ডার',language:'ভাষা নির্বাচন (Language)',theme:'থিম ও ডিজাইন নির্বাচন',
+  sky:'দিন-রাতের অ্যানিমেশন',sound:'দিন-রাতের অ্যানিমেশন শব্দ',soundOn:'🔊 চালু',soundOff:'🔇 বন্ধ',
+  duration:'শব্দের স্থায়িত্বকাল (সেকেন্ড):',division:'নামাজের সময়সূচীর বিভাগ',events:'নতুন ইভেন্ট ও রিমাইন্ডার যুক্ত করুন',
+  eventTitle:'ইভেন্টের নাম লিখুন...',saveEvent:'ইভেন্ট সংরক্ষণ করুন',age:'বয়স ক্যালকুলেটর (Age Calculator)',
+  calcAge:'বয়স হিসাব করুন',prayerNote:'সূর্যোদয়, সূর্যাস্ত ও নামাজের সময় স্থানভিত্তিক জ্যোতির্বৈজ্ঞানিক আনুমানিক হিসাব। স্থানীয় মসজিদের সময়ের সঙ্গে মিলিয়ে নিন।',
+  holiday:'চলতি মাসের সরকারি ছুটি ও দিবস',locationGps:'📍 GPS অবস্থান ব্যবহার করুন',auto:'স্বয়ংক্রিয়',day:'দিন',night:'রাত'
+ },
+ en:{
+  pageTools:'⚙️ Tools View',pageCalendar:'📅 Calendar',language:'Language',theme:'Theme & appearance',
+  sky:'Day / night animation',sound:'Day / night animation sound',soundOn:'🔊 On',soundOff:'🔇 Off',
+  duration:'Sound duration (seconds):',division:'Prayer timetable location',events:'Add event or reminder',
+  eventTitle:'Enter event title...',saveEvent:'Save event',age:'Age Calculator',
+  calcAge:'Calculate age',prayerNote:'Location-based astronomical estimates for sunrise, sunset and prayer times. Verify with your local mosque.',
+  holiday:'Public holidays & observances',locationGps:'📍 Use GPS location',auto:'Auto',day:'Day',night:'Night'
+ }
+};
+function mcTranslate(){
+ const t=MC_I18N[lang];
+ document.getElementById('pageToggleBtn').textContent=currentPage==='calendar'?t.pageTools:t.pageCalendar;
+ const labels=[['langBn','🇧🇩 বাংলা'],['langEn','🇺🇸 English']];
+ document.querySelector('#toolsPage .tool-section:nth-child(1) .tool-label').textContent=t.language;
+ document.querySelector('#toolsPage .tool-section:nth-child(2) .tool-label').textContent=t.sky;
+ document.querySelector('#toolsPage .tool-section:nth-child(3) .tool-label').textContent=t.theme;
+ const toolSections=document.querySelectorAll('#toolsPage .tool-section');
+ if(toolSections[3])toolSections[3].querySelector('.tool-label').textContent=t.sound;
+ if(toolSections[4])toolSections[4].querySelector('.tool-label').textContent=t.division;
+ if(toolSections[5])toolSections[5].querySelector('.tool-label').textContent=t.events;
+ if(toolSections[6])toolSections[6].querySelector('.tool-label').textContent=t.age;
+ document.getElementById('evTitle').placeholder=t.eventTitle;
+ const cat=document.getElementById('evCat');
+ cat.innerHTML=lang==='bn'?'<option value="personal">ব্যক্তিগত - নীল</option><option value="family">পরিবার - গোলাপি</option><option value="work">কাজ - সবুজ</option><option value="religious">ধর্মীয় - বেগুনি</option>':'<option value="personal">Personal - Blue</option><option value="family">Family - Pink</option><option value="work">Work - Green</option><option value="religious">Religious - Purple</option>';
+ document.querySelector('#toolsPage .tool-section:nth-child(6) .primary-btn').textContent=t.saveEvent;
+ document.querySelector('#toolsPage .tool-section:nth-child(7) .primary-btn').textContent=t.calcAge;
+ document.getElementById('soundOnBtn').textContent=t.soundOn;document.getElementById('soundOffBtn').textContent=t.soundOff;
+ document.getElementById('skyModeLabel').textContent=t.sky;
+ document.getElementById('modeAuto').textContent=t.auto;document.getElementById('modeDay').textContent='☀️ '+t.day;document.getElementById('modeNight').textContent='🌙 '+t.night;
+ document.querySelector('#toolsPage .tool-section:nth-child(4) label').childNodes[0].textContent=t.duration+' ';
+ document.querySelector('#toolsPage .tool-section:nth-child(5) button').textContent=t.locationGps;
+ document.getElementById('holidaySecTitle').textContent=t.holiday;
+ document.getElementById('prayerBar').setAttribute('aria-label',lang==='bn'?'নামাজের সময়সূচী':'Prayer timetable');
+}
+function setLang(l){lang=l==='en'?'en':'bn';document.getElementById('langBn').classList.toggle('selected',lang==='bn');document.getElementById('langEn').classList.toggle('selected',lang==='en');mcTranslate();renderThemes();renderDivisions();renderPrayers();updateClockAndHero();renderCalendar();renderEventsList();mcSaveSettings();}
+function setTheme(id){if(!themes.some(t=>t.id===id))return;activeTheme=id;document.body.className=id;renderThemes();mcSaveSettings();}
+function setDivision(div){if(!divisions[div])return;selectedDivision=div;window.mcCoords=null;window.mcLocationMode='division';mcSaveSettings();renderPrayers();updateClockAndHero();}
+function renderDivisions(){document.getElementById('divisionSelect').innerHTML=Object.entries(divisions).map(([k,v])=>'<option value="'+k+'" '+(selectedDivision===k?'selected':'')+'>'+(lang==='bn'?v.bn:v.en)+'</option>').join('');}
+function setSoundEnabled(v){soundEnabled=!!v;document.getElementById('soundOnBtn').classList.toggle('selected',soundEnabled);document.getElementById('soundOffBtn').classList.toggle('selected',!soundEnabled);if(!soundEnabled)stopAmbientSound();else playAmbientSound(targetMix>0.5);mcSaveSettings();}
+function setSoundDuration(v){soundDuration=Math.max(3,Math.min(30,Number(v)||5));document.getElementById('durVal').textContent=String(soundDuration);mcSaveSettings();}
+function setSkyMode(mode){
+ skyMode=mode;['Auto','Day','Night'].forEach(m=>{const el=document.getElementById('mode'+m);if(el)el.classList.toggle('selected',mode===m.toLowerCase());});
+ if(mode==='day'){targetMix=0;playAmbientSound(false);}else if(mode==='night'){targetMix=1;playAmbientSound(true);}else{updateClockAndHero();playAmbientSound(targetMix>.5);}
+ mcSaveSettings();
+}
+function getBanglaDate(date){
+ // Bangladesh revised civil calendar: 1 Boishakh is 14 April; first six months have 31 days.
+ const y=date.getFullYear(),startYear=(date.getMonth()>3||(date.getMonth()===3&&date.getDate()>=14))?y:y-1;
+ const start=new Date(startYear,3,14),target=new Date(date.getFullYear(),date.getMonth(),date.getDate());
+ let remaining=Math.round((target-start)/86400000),bnYear=startYear-593;
+ const leap=(startYear+1)%4===0&&((startYear+1)%100!==0||(startYear+1)%400===0);
+ const lengths=[31,31,31,31,31,31,30,30,30,30,leap?30:29,30];
+ let monthIdx=0;while(monthIdx<11&&remaining>=lengths[monthIdx]){remaining-=lengths[monthIdx];monthIdx++;}
+ return {day:remaining+1,monthIdx,year:bnYear};
+}
+function mcCoordinates(){return window.mcCoords||divisions[selectedDivision];}
+function solarEvent(date,lat,lon,isSunrise){
+ // NOAA sunrise/sunset approximation, returns local minutes in Asia/Dhaka.
+ const rad=Math.PI/180,dayOfYear=Math.floor((Date.UTC(date.getFullYear(),date.getMonth(),date.getDate())-Date.UTC(date.getFullYear(),0,0))/86400000);
+ const lngHour=lon/15,t=isSunrise?dayOfYear+((6-lngHour)/24):dayOfYear+((18-lngHour)/24);
+ const M=(0.9856*t)-3.289,L=(M+1.916*Math.sin(M*rad)+0.020*Math.sin(2*M*rad)+282.634+360)%360;
+ let RA=Math.atan(0.91764*Math.tan(L*rad))/rad;RA=(RA+360)%360;RA+=(Math.floor(L/90)*90-Math.floor(RA/90)*90);RA/=15;
+ const sinDec=0.39782*Math.sin(L*rad),cosDec=Math.cos(Math.asin(sinDec));
+ const cosH=(Math.cos(90.833*rad)-sinDec*Math.sin(lat*rad))/(cosDec*Math.cos(lat*rad));
+ if(cosH>1||cosH< -1)return isSunrise?360:1080;
+ const H=(isSunrise?360-Math.acos(cosH)/rad:Math.acos(cosH)/rad)/15;
+ const utc=H+RA-0.06571*t-6.622-lngHour;
+ return ((utc+6)*60+1440)%1440;
+}
+function prayerTimesFor(date){
+ const c=mcCoordinates(),lat=c.lat,lon=c.lon,sunrise=solarEvent(date,lat,lon,true),sunset=solarEvent(date,lat,lon,false);
+ const noon=((sunrise+sunset)/2),day= Math.max(1,sunset-sunrise);
+ const fajr=(sunrise-90),isha=(sunset+90),asr=noon+day*0.25;
+ return [
+  {bn:'ফজর',en:'Fajr',min:fajr},{bn:'সূর্যোদয়',en:'Sunrise',min:sunrise},
+  {bn:'যোহর',en:'Dhuhr',min:noon+3},{bn:'আসর',en:'Asr',min:asr},
+  {bn:'সূর্যাস্ত',en:'Sunset',min:sunset},{bn:'মাগরিব',en:'Maghrib',min:sunset+3},
+  {bn:'ইশা',en:'Isha',min:isha}
+ ];
+}
+function renderPrayers(){
+ const times=prayerTimesFor(new Date()),c=mcCoordinates();
+ document.getElementById('prayerBar').innerHTML=times.map(p=>'<div class="prayer-item"><div class="p-name">'+(lang==='bn'?p.bn:p.en)+'</div><div class="p-time">'+format12Hour(Math.round(p.min))+'</div></div>').join('')+
+ '<div class="prayer-note">'+MC_I18N[lang].prayerNote+' · '+(lang==='bn'?c.bn||'GPS অবস্থান':'GPS / '+(c.en||'Selected location'))+'</div>';
+}
+function useGPSLocation(){
+ const status=document.getElementById('locationStatus');
+ if(!navigator.geolocation){status.textContent=lang==='bn'?'এই ডিভাইসে GPS পাওয়া যায়নি।':'Geolocation is unavailable.';return;}
+ status.textContent=lang==='bn'?'GPS অবস্থান নেওয়া হচ্ছে…':'Getting GPS location…';
+ navigator.geolocation.getCurrentPosition(pos=>{
+  window.mcCoords={lat:pos.coords.latitude,lon:pos.coords.longitude,bn:'GPS অবস্থান',en:'GPS location'};window.mcLocationMode='gps';
+  mcSaveSettings();status.textContent=lang==='bn'?'GPS অবস্থান সক্রিয় হয়েছে।':'GPS location enabled.';renderPrayers();updateClockAndHero();
+ },err=>{status.textContent=(lang==='bn'?'GPS পাওয়া যায়নি: ':'GPS unavailable: ')+err.message;},{enableHighAccuracy:true,timeout:12000,maximumAge:300000});
+}
+function updateClockAndHero(){
+ const now=new Date(),parts=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Dhaka',year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'numeric',hourCycle:'h23'}).formatToParts(now);
+ const p=Object.fromEntries(parts.map(x=>[x.type,x.value])),d=new Date(Number(p.year),Number(p.month)-1,Number(p.day),Number(p.hour),Number(p.minute)),mins=Number(p.hour)*60+Number(p.minute);
+ const times=prayerTimesFor(d),sunrise=times[1].min,sunset=times[4].min;
+ if(skyMode==='auto'){targetMix=mins<sunrise||mins>=sunset?1:0; if(mins>=sunrise-35&&mins<=sunrise+35)targetMix=Math.max(0,Math.min(1,(sunrise+35-mins)/70));if(mins>=sunset-35&&mins<=sunset+35)targetMix=Math.max(0,Math.min(1,(mins-(sunset-35))/70));}
+ document.getElementById('liveClock').textContent=format12Hour(mins);
+ const bd=getBanglaDate(d),hj=getHijriDate(d),mName=lang==='bn'?engMonthsBn[d.getMonth()]:engMonthsEn[d.getMonth()];
+ document.getElementById('heroEngDate').textContent=toBn(d.getDate())+' '+mName+' '+toBn(d.getFullYear());
+ document.getElementById('heroSubDates').textContent=lang==='bn'?'বঙ্গাব্দ: '+toBn(bd.day)+' '+bnMonths[bd.monthIdx]+' '+toBn(bd.year)+' • হিজরি: '+toBn(hj.day)+' '+hijriMonths[hj.monthIdx]+' '+toBn(hj.year):'Bangla: '+bd.day+' '+bnMonthsEn[bd.monthIdx]+' '+bd.year+' • Hijri: '+hj.day+' '+hijriMonthsEn[hj.monthIdx]+' '+hj.year;
+}
+function mcScheduleEvent(e){
+ if(!window.AndroidCalendar||!e)return;
+ const when=new Date(e.date+'T'+(e.time||'09:00')+':00').getTime();
+ if(when>Date.now())try{AndroidCalendar.scheduleNotification(String(e.id),String(e.title),when);}catch(err){console.warn(err);}
+}
+function addEvent(){
+ const title=document.getElementById('evTitle').value.trim(),date=document.getElementById('evDate').value,time=document.getElementById('evTime').value,cat=document.getElementById('evCat').value;
+ if(!title||!date){alert(lang==='bn'?'ইভেন্টের নাম ও তারিখ দিন।':'Enter an event title and date.');return;}
+ if(title.length>160){alert(lang==='bn'?'ইভেন্টের নাম ১৬০ অক্ষরের মধ্যে রাখুন।':'Keep the title under 160 characters.');return;}
+ const ev={id:Date.now(),title,date,time:/^\d{2}:\d{2}$/.test(time)?time:'09:00',cat};
+ events.push(ev);safeStoreEvents();mcScheduleEvent(ev);document.getElementById('evTitle').value='';renderEventsList();renderCalendar();
+}
+function deleteEvent(id){
+ events=events.filter(e=>Number(e.id)!==Number(id));safeStoreEvents();
+ if(window.AndroidCalendar)try{AndroidCalendar.cancelNotification(String(id));}catch(e){}
+ renderEventsList();renderCalendar();
+}
+function renderEventsList(){
+ const host=document.getElementById('savedEventsList');
+ if(!events.length){host.innerHTML='<div style="font-size:12px;color:var(--text-secondary)">'+(lang==='bn'?'এখনও কোনো ইভেন্ট সংরক্ষিত নেই।':'No saved events yet.')+'</div>';return;}
+ host.innerHTML=events.slice().sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).map(e=>
+ '<div class="h-item"><span><strong>'+escapeHTML(e.title)+'</strong> ('+escapeHTML(e.date)+' '+escapeHTML(e.time)+')</span><button type="button" onclick="deleteEvent('+Number(e.id)+')" style="background:none;border:none;color:#f87171;font-weight:700;padding:6px">✕</button></div>').join('');
+}
+function mcRestoreEvents(){events=normalizeEvents(events);events.forEach(mcScheduleEvent);}
+function setSoundDuration(v){soundDuration=Math.max(3,Math.min(30,Number(v)||5));document.getElementById('durVal').textContent=String(soundDuration);mcSaveSettings();}
+window.addEventListener('DOMContentLoaded',()=>{
+ mcLoadSettings();
+ document.getElementById('durVal').textContent=String(soundDuration);
+ document.querySelector('input[type="range"]').value=String(soundDuration);
+ renderThemes();renderDivisions();renderPrayers();mcTranslate();updateClockAndHero();
+ skyMix=targetMix;renderCalendar();renderEventsList();mcRestoreEvents();
+ document.getElementById('soundOnBtn').classList.toggle('selected',soundEnabled);document.getElementById('soundOffBtn').classList.toggle('selected',!soundEnabled);
+ ['Auto','Day','Night'].forEach(m=>document.getElementById('mode'+m).classList.toggle('selected',skyMode===m.toLowerCase()));
+ setInterval(()=>{updateClockAndHero();},60000);
+ if(window.AndroidCalendar)try{AndroidCalendar.requestNotificationPermission();}catch(e){}
+});
+
 </script>
 </body>
 </html>
