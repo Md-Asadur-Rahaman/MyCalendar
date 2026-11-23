@@ -1,43 +1,31 @@
-# MyCalendar Android
+# MyCalendar 2.0
 
-Android WebView wrapper for the existing `MyCalendar_Enhanced.html`. The original HTML file is preserved in the repository and copied unchanged into `app/src/main/assets/`, where the app loads it locally without needing a web server.
+বাংলা ও ইংরেজি ক্যালেন্ডার, বাংলাদেশ revised civil Bangla date, location-based sunrise/sunset and prayer-time estimates, persistent settings, Liquid Glass / Nothing OS themes, animated day/night sky, and Android event reminders.
 
-## Create the permanent signing key (once)
+## Build locally
 
-1. Push this repository to GitHub.
-2. Open **Actions → Create MyCalendar Signing Keystore → Run workflow**.
-3. Download the `MyCalendar-Signing-Setup` artifact immediately (it expires after one day).
-4. Store `mycalendar-release.jks` safely offline. Never commit it or share it publicly.
-5. In **Settings → Secrets and variables → Actions**, add these repository secrets:
-   - `ANDROID_KEYSTORE_BASE64`: the complete one-line contents of `keystore-base64.txt`
-   - `ANDROID_KEYSTORE_PASSWORD`: value of the same name in `credentials.txt`
-   - `ANDROID_KEY_ALIAS`: value of the same name in `credentials.txt` (normally `mycalendar`)
-   - `ANDROID_KEY_PASSWORD`: value of the same name in `credentials.txt`
-
-## Build the signed APK
-
-1. Open **Actions → Build Signed MyCalendar APK → Run workflow**.
-2. Wait for the workflow to finish successfully.
-3. Download **MyCalendar-Signed-APK** from the run's Artifacts section.
-
-A push to `main` or `master` also starts the signed release workflow. The workflow intentionally stops with a clear error until all four signing secrets are configured.
-
-**Important:** Back up the keystore and passwords securely. Every future update must use the same signing key. Losing it generally prevents updating an existing installation signed with that key.
-
-## Local build
-
-Requires JDK 17 and Gradle 8.7:
+Requires JDK 17 and Gradle 8.7.
 
 ```bash
 gradle assembleDebug
 ```
 
-For a locally signed release, set `ANDROID_KEYSTORE_PATH`, `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and `ANDROID_KEY_PASSWORD`, then run `gradle assembleRelease`.
+## Signed APK with GitHub Actions
 
-## Included Android improvements
+1. Run **Create MyCalendar Signing Keystore** once.
+2. Download and securely back up the `MyCalendar-Signing-Setup` artifact.
+3. Add repository Actions secrets:
+   - `ANDROID_KEYSTORE_BASE64` = complete content of `keystore-base64.txt`
+   - `ANDROID_KEYSTORE_PASSWORD` = password in `credentials.txt`
+   - `ANDROID_KEY_ALIAS` = `mycalendar`
+   - `ANDROID_KEY_PASSWORD` = password in `credentials.txt`
+4. Run **Build Signed MyCalendar APK**.
+5. Download `MyCalendar-Signed-APK` from the workflow run's Artifacts section.
 
-- Bundles the original calendar HTML locally.
-- Enables JavaScript and DOM storage for the calendar's interactive features and saved events/themes.
-- Uses AndroidX WebKit's asset loader and a local HTTPS origin.
-- Adds Android back navigation, a native launcher icon, and a dark native window theme.
-- Keeps signing credentials out of source control.
+Keep the keystore and passwords private. Back them up: future updates must use the same signing key.
+
+## Notes
+
+- Sunrise, sunset and prayer times are calculated locally from selected division coordinates or GPS. They are estimates; prayer calculation conventions vary. Confirm religious observance times with a trusted local mosque.
+- Android notifications require notification permission. Exact alarm availability varies by Android version and device power settings; the app falls back to inexact idle-compatible alarms where necessary.
+- GPS requires location permission and device location services. Division selection remains available as a manual fallback.
