@@ -1,5 +1,4 @@
 
-
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
@@ -17,6 +16,17 @@ android {
         versionName '2.0'
     }
 
+    // Java JVM Target
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // Kotlin JVM Target
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     signingConfigs {
         release {
             def ksPath = System.getenv('ANDROID_KEYSTORE_PATH')
@@ -32,6 +42,7 @@ android {
             signingConfig signingConfigs.release
             minifyEnabled false
         }
+
         debug {
             applicationIdSuffix '.debug'
         }
